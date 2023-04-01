@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <script src="https://cdn.staticfile.org/jquery/3.4.1/jquery.min.js"></script>
+    <img src="http://127.0.0.1:8099/img/1678542443885.jpeg" alt="" />
+  </head>
+  <body>
+    上传图片<input type="file" name="" id="file" />
+    <img class="avatar" id="avatar" width="150" height="150" src="" alt="等着" />
+    <script>
+      let time = Date.now() + parseInt(Math.random() * 999) + parseInt(Math.random() * 2222);
+      console.log(time);
+      $(function () {
+        // 图片上传
+        $("#file").on("change", function (e) {
+          // console.log(this[0].files)
+          var windowURL = window.URL || window.webkitURL;
+          var dataURL = windowURL.createObjectURL(e.target.files[0]);
+          console.log(dataURL);
+          // 获取file域里的图片信息
+          var formData = new FormData();
+          //创建formdata对象
+          formData.append("test", e.target.files[0]);
+          // 将文件信息 append 进入formdata对象  key值 为后台 single 设置的值
+          console.log(formData);
+          $.ajax({
+            url: "http://127.0.0.1:8099/testsss",
+            type: "POST",
+            data: formData,
+            cache: false,
+            contentType: false,
+            processData: false,
+            success: function (data) {
+              console.log(data);
+              if (data.err == 0) {
+                $("#avatar").attr("src", data.data);
+                $("#hiavatar").val(data.data);
+              }
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+              console.log(500);
+            },
+          });
+        });
+      });
+    </script>
+  </body>
+</html>
